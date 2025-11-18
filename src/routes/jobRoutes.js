@@ -9,9 +9,10 @@ router.get("/", requireAuth, jobController.listJobs);
 router.get("/:id", requireAuth, jobController.getJob);
 
 // Mutations: only ADMIN or JOB_MANAGER
-router.post("/", requireAuth, requireRoles(["ADMIN","JOB_MANAGER"]), jobController.createJob);
-router.patch("/:id", requireAuth, requireRoles(["ADMIN","JOB_MANAGER"]), jobController.updateJob);
-router.delete("/:id", requireAuth, requireRoles(["ADMIN","JOB_MANAGER"]), jobController.deleteJob);
+router.post("/", requireAuth, requireRoles(["ADMIN","JOB_MANAGER","SUPERADMIN"]), jobController.createJob);
+router.patch("/:id", requireAuth, requireRoles(["ADMIN","JOB_MANAGER","SUPERADMIN"]), jobController.updateJob);
+router.delete("/:id", requireAuth, requireRoles(["ADMIN","JOB_MANAGER","SUPERADMIN"]), jobController.deleteJob);
+
 
  /**
   * @openapi

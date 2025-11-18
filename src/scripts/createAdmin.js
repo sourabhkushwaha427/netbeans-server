@@ -8,7 +8,6 @@ async function createAdmin() {
     const full_name = process.env.INIT_ADMIN_NAME || "Initial Admin";
     const email = process.env.INIT_ADMIN_EMAIL || "admin@example.com";
     const password = process.env.INIT_ADMIN_PASSWORD || "changeme123";
-
     const hashed = await bcrypt.hash(password, 10);
     const query = `
       INSERT INTO users (full_name, email, password_hash, "role")

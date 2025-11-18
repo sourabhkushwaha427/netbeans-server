@@ -20,4 +20,8 @@ app.use("/api/users", userRoutes);
 const jobRoutes = require("./routes/jobRoutes");
 app.use("/api/jobs", jobRoutes);
 
+// FORMS 
+const formRoutes = require("./routes/formRoutes");
+app.use("/api/forms", formRoutes);
+
 module.exports = app;

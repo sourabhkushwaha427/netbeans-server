@@ -1,6 +1,5 @@
 const pool = require("../config/db");
 
-// create user (admin creates users)
 exports.createUser = async ({ full_name, email, password_hash, role = "JOB_MANAGER", created_by_admin_id = null }) => {
   const query = `
     INSERT INTO users (full_name, email, password_hash, "role", created_by_admin_id)

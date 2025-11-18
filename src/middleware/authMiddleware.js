@@ -1,15 +1,12 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// requireAuth - verifies Bearer JWT only
 exports.requireAuth = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({ error: "Missing auth token" });
   }
-
   const token = authHeader.split(" ")[1];
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
@@ -20,19 +17,20 @@ exports.requireAuth = (req, res, next) => {
   }
 };
 
-// add near exports in src/middleware/authMiddleware.js
 exports.requireRoles = (allowed = []) => {
   return (req, res, next) => {
     if (!req.user) return res.status(401).json({ error: "Unauthorized" });
+    if (req.user.role === "SUPERADMIN") return next();
     if (!Array.isArray(allowed) || !allowed.length) return next();
     if (!allowed.includes(req.user.role)) return res.status(403).json({ error: "Forbidden" });
     next();
   };
 };
 
-
 exports.requireAdmin = (req, res, next) => {
   if (!req.user) return res.status(401).json({ error: "Unauthorized" });
-  if (req.user.role !== "ADMIN") return res.status(403).json({ error: "Require ADMIN role" });
+  if (req.user.role !== "ADMIN" && req.user.role !== "SUPERADMIN") {
+    return res.status(403).json({ error: "Require ADMIN role" });
+  }
   next();
 };

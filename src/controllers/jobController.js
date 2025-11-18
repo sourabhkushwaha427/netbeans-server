@@ -1,12 +1,9 @@
 // src/controllers/jobController.js
 const Job = require("../models/jobModel");
-
-// Allowed roles for mutating operations
-const MUTATOR_ROLES = ["ADMIN", "JOB_MANAGER"];
+const MUTATOR_ROLES = ["ADMIN", "JOB_MANAGER", "SUPERADMIN"];
 
 exports.createJob = async (req, res) => {
   try {
-    // req.user must be set by requireAuth
     const actor = req.user;
     if (!actor) return res.status(401).json({ error: "Unauthorized" });
 
@@ -14,8 +11,6 @@ exports.createJob = async (req, res) => {
     if (!title || !description || !location || !type) {
       return res.status(400).json({ error: "title, description, location and type are required" });
     }
-
-    // Only ADMIN or JOB_MANAGER can create (route level should also enforce)
     if (!MUTATOR_ROLES.includes(actor.role)) return res.status(403).json({ error: "Forbidden" });
 
     const created = await Job.createJob({
@@ -27,7 +22,6 @@ exports.createJob = async (req, res) => {
       type,
       posted_by_user_id: actor.id
     });
-
     return res.status(201).json(created);
   } catch (err) {
     console.error(err);
@@ -37,7 +31,6 @@ exports.createJob = async (req, res) => {
 
 exports.listJobs = async (req, res) => {
   try {
-    // allow query params: active=true, q=search, limit, offset
     const onlyActive = req.query.active === "true" || false;
     const qSearch = req.query.q || null;
     const limit = Math.min(100, parseInt(req.query.limit, 10) || 50);
@@ -67,19 +60,14 @@ exports.updateJob = async (req, res) => {
   try {
     const actor = req.user;
     if (!actor) return res.status(401).json({ error: "Unauthorized" });
-
-    // Only ADMIN or JOB_MANAGER can update
     if (!MUTATOR_ROLES.includes(actor.role)) return res.status(403).json({ error: "Forbidden" });
-
     const { id } = req.params;
     const allowedFields = ["title","description","short_description","location","department","type","is_active"];
     const updates = {};
     for (const f of allowedFields) {
       if (req.body[f] !== undefined) updates[f] = req.body[f];
     }
-
     if (!Object.keys(updates).length) return res.status(400).json({ error: "No updatable fields provided" });
-
     const updated = await Job.updateJob(id, updates);
     if (!updated) return res.status(404).json({ error: "Job not found or nothing updated" });
     res.json(updated);
@@ -93,9 +81,7 @@ exports.deleteJob = async (req, res) => {
   try {
     const actor = req.user;
     if (!actor) return res.status(401).json({ error: "Unauthorized" });
-
     if (!MUTATOR_ROLES.includes(actor.role)) return res.status(403).json({ error: "Forbidden" });
-
     const { id } = req.params;
     await Job.deleteJob(id);
     res.json({ deleted: true });
