@@ -1,0 +1,7 @@
+# Dependencies
+# Should be installed via 'npm install' or 'yarn install'
+/node_modules
+
+# Environment Variables
+# Never commit sensitive keys or secrets!
+.env
