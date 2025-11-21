@@ -95,6 +95,42 @@ CREATE TABLE IF NOT EXISTS consultation_requests (
   is_contacted BOOLEAN NOT NULL DEFAULT false
 );
 
+
+CREATE TABLE IF NOT EXISTS job_applications (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+
+  full_name VARCHAR(100) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  phone VARCHAR(50),
+  current_city VARCHAR(100),
+
+  position_applying_for VARCHAR(255) NOT NULL,
+  highest_qualification VARCHAR(100),
+
+  is_fresher BOOLEAN DEFAULT FALSE,
+  company_name VARCHAR(255),
+  designation VARCHAR(255),
+  years_experience NUMERIC(5,2),
+  last_ctc NUMERIC(12,2),
+
+  expected_ctc NUMERIC(12,2),
+
+  linkedin_url VARCHAR(1000),
+  portfolio_url VARCHAR(1000),
+
+  -- store resume as file path or URL
+  resume_path VARCHAR(2000),
+  resume_file_name VARCHAR(255),
+  resume_content_type VARCHAR(100),
+  resume_uploaded_at TIMESTAMPTZ,
+
+  declaration BOOLEAN DEFAULT FALSE,
+
+  submitted_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+
+  notes TEXT
+);
+
 --------------------------------------------------------------------------------
 -- 7) Trigger to prevent deletion of SUPERADMIN (defence-in-depth)
 --    (create trigger function first, then attach trigger if not already attached)

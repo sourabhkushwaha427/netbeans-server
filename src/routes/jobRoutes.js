@@ -5,8 +5,8 @@ const jobController = require("../controllers/jobController");
 const { requireAuth, requireRoles } = require("../middleware/authMiddleware");
 
 // Public read: list and get (but requireAuth applied to keep consistent - remove if you want public)
-router.get("/", requireAuth, jobController.listJobs);
-router.get("/:id", requireAuth, jobController.getJob);
+router.get("/", jobController.listJobs);
+router.get("/:id", jobController.getJob);
 
 // Mutations: only ADMIN or JOB_MANAGER
 router.post("/", requireAuth, requireRoles(["ADMIN","JOB_MANAGER","SUPERADMIN"]), jobController.createJob);

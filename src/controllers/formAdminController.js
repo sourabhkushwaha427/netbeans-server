@@ -1,6 +1,7 @@
 // src/controllers/formAdminController.js
 const contactModel = require("../models/contactModel");
 const consultationModel = require("../models/consultationModel");
+const ApplicationModel = require("../models/applicationModel");
 
 exports.listContacts = async (req, res) => {
   try {
@@ -71,5 +72,31 @@ exports.markConsultationContacted = async (req, res) => {
   } catch (err) {
     console.error("markConsultationContacted error:", err);
     res.status(500).json({ error: err.message });
+  }
+};
+
+
+// list (admin)
+exports.listApplications = async (req, res) => {
+  try {
+    const limit = Math.min(200, parseInt(req.query.limit, 10) || 50);
+    const offset = parseInt(req.query.offset, 10) || 0;
+    const rows = await ApplicationModel.getAllApplications({ limit, offset });
+    res.json({ rows, limit, offset });
+  } catch (err) {
+    console.error("listApplications error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+exports.getApplication = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const app = await ApplicationModel.getApplicationById(id);
+    if (!app) return res.status(404).json({ error: "Not found" });
+    res.json(app);
+  } catch (err) {
+    console.error("getApplication error:", err);
+    res.status(500).json({ error: "Server error" });
   }
 };
