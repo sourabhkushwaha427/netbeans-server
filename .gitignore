@@ -5,3 +5,5 @@
 # Environment Variables
 # Never commit sensitive keys or secrets!
 .env
+
+/uploads
