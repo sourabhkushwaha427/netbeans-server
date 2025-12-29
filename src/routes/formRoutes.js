@@ -178,7 +178,34 @@ router.patch("/consultation/:id/read", requireAuth, requireAdmin, adminControlle
  *       200:
  *         description: list of job applications
  */
+
+/**
+ * @openapi
+ * /api/forms/job-applications/{id}:
+ *   delete:
+ *     tags: [Forms]
+ *     summary: Delete a job application (admin only)
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: application deleted
+ *       404:
+ *         description: not found
+ */
+router.delete("/job-applications/:id", requireAuth,requireAdmin, adminController.deleteApplication );
 router.get("/job-applications", requireAuth, requireAdmin, adminController.listApplications);
 router.get("/job-applications/:id", requireAuth, requireAdmin, adminController.getApplication);
+
+
+router.delete("/contact/:id", requireAuth, requireAdmin, adminController.deleteContact);
+router.delete("/consultation/:id", requireAuth, requireAdmin, adminController.deleteConsultation);
+
 
 module.exports = router;

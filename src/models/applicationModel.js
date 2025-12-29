@@ -44,3 +44,11 @@ exports.getApplicationById = async (id) => {
   const { rows } = await pool.query(`SELECT * FROM job_applications WHERE id = $1`, [id]);
   return rows[0];
 };
+
+exports.deleteApplicationById = async (id) => {
+  const { rows } = await pool.query(
+    "DELETE FROM job_applications WHERE id = $1 RETURNING *",
+    [id]
+  );
+  return rows[0]; 
+};

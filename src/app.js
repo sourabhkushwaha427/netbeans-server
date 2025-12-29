@@ -1,12 +1,21 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const path = require("path");
+
+
 require("dotenv").config();
 
 
 app.use(cors({ origin: "*" }));
 
 app.use(express.json());
+
+app.use(
+  "/uploads",
+  express.static(path.join(process.cwd(), "uploads"))
+);
+
 
 // Swagger mount
 const swaggerUi = require("swagger-ui-express");
@@ -20,6 +29,7 @@ app.use("/auth", authRoutes);
 // Users
 const userRoutes = require("./routes/userRoutes");
 app.use("/api/users", userRoutes);
+
 // Jobs 
 const jobRoutes = require("./routes/jobRoutes");
 app.use("/api/jobs", jobRoutes);

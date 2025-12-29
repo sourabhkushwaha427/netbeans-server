@@ -100,3 +100,36 @@ exports.getApplication = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
+
+
+
+exports.deleteApplication = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deleted = await ApplicationModel.deleteApplicationById(id);
+    if (!deleted) {
+      return res.status(404).json({ error: "Not found" });
+    }
+
+    res.json({ message: "Application deleted successfully" });
+  } catch (err) {
+    console.error("deleteApplication error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+
+
+exports.deleteContact = async (req, res) => {
+  const deleted = await contactModel.deleteById(req.params.id);
+  if (!deleted) return res.status(404).json({ error: "Not found" });
+  res.json({ message: "Contact deleted" });
+};
+
+exports.deleteConsultation = async (req, res) => {
+  const deleted = await consultationModel.deleteById(req.params.id);
+  if (!deleted) return res.status(404).json({ error: "Not found" });
+  res.json({ message: "Consultation deleted" });
+};
+

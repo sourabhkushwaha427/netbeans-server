@@ -27,3 +27,11 @@ exports.markAsRead = async (id) => {
   const { rows } = await pool.query(q, [id]);
   return rows[0];
 };
+
+exports.deleteById = async (id) => {
+  const { rows } = await pool.query(
+    "DELETE FROM contact_submissions WHERE id=$1 RETURNING *",
+    [id]
+  );
+  return rows[0];
+};
